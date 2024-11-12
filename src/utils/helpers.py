@@ -6,7 +6,7 @@ import pandas as pd
 from flask import jsonify
 from dateutil.parser import parse
 
-from src.utils.consts import csv_url, THRESHOLDS
+from src.utils.consts import csv_url, THRESHOLDS, path_url
 
 
 def handle_request_errors(f):
@@ -37,7 +37,7 @@ def get_transformed_data_frames(get_online: bool = False) -> [pd.DataFrame]:
     if get_online:
         weather_data = pandas.read_csv(csv_url)
     else:
-        weather_data = pandas.read_csv('weather.csv')
+        weather_data = pandas.read_csv(path_url)
     transformed_weather_data = data_transform(weather_data)
     [temperature, irradiance, wind_speed] = data_split(transformed_weather_data)
     return [temperature, irradiance, wind_speed]

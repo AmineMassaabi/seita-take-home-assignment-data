@@ -9,7 +9,7 @@ from timetomodel.featuring import construct_features
 from timetomodel.transforming import Transformation
 import statsmodels.api as sm
 
-from src.utils.consts import target_variables
+from src.utils.consts import target_variables, path_url
 
 
 class MyDFPostProcessing(Transformation):
@@ -44,7 +44,7 @@ def get_speccing_object_series_specs(df, sensor):
 
 def get_speccing_csv_series_specs(sensor):
     return speccing.CSVFileSeriesSpecs(
-        file_path='weather.csv',
+        file_path=path_url,
         time_column='event_start',
         value_column='event_value',
         name=sensor,
