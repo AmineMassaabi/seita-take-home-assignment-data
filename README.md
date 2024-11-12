@@ -1,54 +1,99 @@
 # Seita data engineering assignment
 
-Thanks for taking the time to apply at Seita Energy Flexibility! This task is the technical part of the application procedure.
+Thanks for taking the time to review my application at Seita Energy Flexibility!
 
-This task hopefully takes not more than half a day. Of course, perfection easily takes more. What we really want is to discuss the results and your choices. You can stop after half a day ― we'll be interested in discussing how well you spent that time, looking at usable results.
+# Weather Forecast API
 
-The task tests some data engineering (understanding and querying data mainly), but as we build software that runs in the wild on a daily basis, and we do that in a team, it also tests your software engineering skills.
+This project provides a weather forecast API for accessing weather data, designed as part of a data engineering assignment for Seita Energy Flexibility. The application utilizes **Timely-Beliefs** for structured data representation of weather forecasts and **FlexMeasures** for embedding API endpoints.
 
-## Form
+## Table of Contents
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Setup](#setup)
+- [Future Improvements](#future-improvements)
 
-We'd like you to put your code in a git repository on the web. This can be Github, Gitlab or Bitbucket etc.
-Great if it's public (putting yourself out there is good!) but if you can't, then we prefer a closed repository on Github, where you add our accounts so we are able to read.
+---
 
-The code should be self-contained, apart from dependencies.
-There should be a Readme telling us what to see and do.
 
-## The task
+## Features
 
-We want you to build two API endpoints for GETting weather information as JSON response.
+- **Structured Forecast Representation**: Represents forecasts with Timely-Beliefs, supporting complex temporal data handling.
+- **REST API Endpoints**: Provides endpoints for frontend developers to easily fetch JSON responses with weather forecasts.
+- **Scalable and Modular Design**: The project is built with a modular structure to support scalability and easy maintenance.
+- **Configurable and Extendable**: Uses a configuration file for easy adjustments and supports plugin extensions.
 
-We have prepared [a dataset with weather forecasts in CSV](data/weather.csv) to be used.
+## Project Structure
+
+
+
+seita-take-home-assignment-data/\n
+
+├── data/           
+
+│   └── weather_forecast.csv    # CSV data file containing weather forecasts
+
+│
+
+├── my_weather_plugin/          
+
+│   ├── __init__.py
+
+│   ├── consts.py                # Constants for configurations or settings
+
+We have prepared [a dataset with weather forecasts in CSV](weather.csv) to be used.
 - It contains forecasts for temperature, wind speed, irradiance - up to 48 hours in advance.
 - In terms of this data, we forecast an "event", for instance that some temperature value will happen. This event has a time ("event start") and a value ("event value").
 - Also, this data tells you the time at which the forecast (a "belief") has been made - it can be derived with the belief horizon column (this is useful for simulations and relevant to this task).
 
-As target audience, you can think about frontend developers wanting to show the responses to users. They don't know Python.
+│   ├── weather_forecast.py      # Main module for processing weather forecasts
 
-You have free choice of tooling (libraries / frameworks), as long as you use Python3 and return JSON.
+│   └── tests/                   # Unit tests for the plugin
 
-You might choose to (partially) use the stack we are developing within Seita (it's open source and documented), but you don't have to.
-It might save you some time, though, but of course learning it costs some time, as well. Most of all, we want you to deliver something that works, so we can discuss it.
-Options are to look at timely-beliefs for data representation and FlexMeasures for embedding an endpoint (here you'd probably develop a FlexMeasures plugin).
+│       ├── __init__.py
 
-## Endpoint 1: GET /forecasts
+│       ├── conftest.py          # Tests configuration
 
-Given two parameters ("now" and "then", both datetimes), return the three kinds of forecasts for "then" that are the most recent, given the knowledge you can assume was available at "now".
+│       └── test_app.py          # The application setup and API functionality Tests
 
-Note: The ``belief_horizon`` field matters here. It tells you how much earlier the forecast for a specific time slot (``event_start``) was made.
+│
 
-## Endpoint 2: GET /tomorrow
+├── docker-compose.yml           # Docker Compose configuration to run the app and Test
 
-Given one parameter "now", a datetime, return three booleans, telling us if the next day (the one after "now") is expected to be "warm", "sunny" and "windy".
-Again, *use only the knowledge from the dataset which you can assume was available at "now"*. 
-Use three internal thresholds to determine the answer and you can also decide if the threshold (likely) being breached once is already enough for the boolean to be true.
+├── Dockerfile                   # Dockerfile to build the app container
 
-## Deliverables
+├── main.py                      # Main entry point to run the application
 
-What will we take into consideration when we rate this assignment?
+├── README.md                    # Project documentation
 
-* The first two priorities are of course that the logic behaves *correctly* (input leads to the correct output) and that the API calls are *fast* (they do not take longer than necessary to return ― imagine this is being called hundreds or thousands of time per hour). But there are more priorities, and they do matter a lot for successful software development, see below.
-* The endpoints should be demonstratable by you. But they should also be easy to start up for us (to see if they work). So please include clear instructions for somebdy who is not you how to run this toy application (this begins with installing dependencies).
-* Both endpoints need clear documentation for users (think of the frontend developers mentioned above), at least in the docstring. How to use, how input looks like, what to expect if things go well and what if they don't.
-* Testing is crucial. Time might not allow you to test all aspects, but please provide unit tests which test the basic behaviour. They should use dummy test data, not the real data.
-* We appreciate that you place TODOs where (due to a lack of time) you provide us with a clear idea how further work would make this code mode robust, improve its test coverage and improve usability.
+├── requirements.txt             # Dependencies for the project
+
+└── test.dockerfile              # Dockerfile for testing the application
+
+## Setup
+
+### Prerequisites
+
+- Docker and Docker Compose installed on your machine.
+
+### Installation and Running with Docker
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/AmineMassaabi/weather-forecast-api.git
+   cd weather-forecast-api
+   ```
+2. **Build the Docker Image and Start running Test**
+   ```bash
+   docker-compose up --build
+   ```
+
+## Future Improvements
+- Automate the model data update when updaing the csv file in github
+- Plugin: FlexMeasures plugin need to be developped 
+- Tests: data need to be dummy
+- Error Handling and Validation: Improve error responses for invalid requests.
+- Caching: Implement caching for frequently requested forecasts to improve performance.
+- Additional Forecast Types: Extend the model to handle additional weather data (e.g., humidity, precipitation).
+- Authentication: Add authentication for production environments to limit access.
+
+### Thanks in advance 
