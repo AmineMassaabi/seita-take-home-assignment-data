@@ -9,7 +9,7 @@ from timetomodel.featuring import construct_features
 from timetomodel.transforming import Transformation
 import statsmodels.api as sm
 
-from src.utils.consts import target_variables, path_url
+from my_weather_plugin.consts import target_variables, path_url
 
 
 class MyDFPostProcessing(Transformation):
@@ -140,6 +140,7 @@ class WEATHER_FORECAST_MODEL():
         We transformed evaluate_models from timetomodel to get adequate output
         :return: rmse values for each model
         """
+        self.train_models(lag)
         rmse_values = {}
         percentage_accuracy = {}
         for target_variable in target_variables:

@@ -6,7 +6,7 @@ import pandas as pd
 from flask import jsonify
 from dateutil.parser import parse
 
-from src.utils.consts import csv_url, THRESHOLDS, path_url
+from my_weather_plugin.consts import csv_url, THRESHOLDS, path_url
 
 
 def handle_request_errors(f):
