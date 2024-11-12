@@ -6,9 +6,9 @@ from flask_cors import CORS
 from waitress import serve
 from flask_compress import Compress
 
-from src.utils.helpers import handle_request_errors, parse_date, get_transformed_data_frames, get_nearst_values_to_now, \
+from my_weather_plugin.helpers import handle_request_errors, parse_date, get_transformed_data_frames, get_nearst_values_to_now, \
     get_difference_of_hour_between_two_dates, check_threshold
-from src.weather_forecast import WEATHER_FORECAST_MODEL
+from my_weather_plugin.weather_forecast import WEATHER_FORECAST_MODEL
 
 
 def prepare_data_for_prediction(now: datetime, target_time: datetime):
@@ -93,6 +93,31 @@ def create_app():
         forecasted_result = forecasting_model.forecast_model(now, calculation_mesures)
 
         return jsonify(check_threshold(forecasted_result))
+
+    @app.route('/forecast_rmse_precision', methods=['GET'], endpoint='forecast_rmse_precision')
+    @handle_request_errors
+    def get_forecast_rmse_precision():
+        """
+        Handle GET requests to fetch weather forecast precision for a given number of 'lag' hours represent forecasting
+        horizon.
+        it takes lag an integer as a variable
+        """
+        lag = request.args.get('lag')
+
+        if not lag:
+            return jsonify({'error': 'Missing required parameters'}), 400
+
+
+        try:
+            lag = int(lag)
+        except:
+            return jsonify({'error': "'lag' value should be an integer"}), 400
+        assert isinstance(lag, int), "'lag' value should be an integer"
+        # todo now value validation (check if value in our data range)
+
+        rmse_values, percentage_accuracy = forecasting_model.evaluate_models(lag)
+
+        return jsonify({'rmse_values': rmse_values, 'percentage_accuracy': percentage_accuracy})
 
     return app
 

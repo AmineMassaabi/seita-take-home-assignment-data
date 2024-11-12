@@ -18,7 +18,7 @@ There should be a Readme telling us what to see and do.
 
 We want you to build two API endpoints for GETting weather information as JSON response.
 
-We have prepared [a dataset with weather forecasts in CSV](weather.csv) to be used.
+We have prepared [a dataset with weather forecasts in CSV](data/weather.csv) to be used.
 - It contains forecasts for temperature, wind speed, irradiance - up to 48 hours in advance.
 - In terms of this data, we forecast an "event", for instance that some temperature value will happen. This event has a time ("event start") and a value ("event value").
 - Also, this data tells you the time at which the forecast (a "belief") has been made - it can be derived with the belief horizon column (this is useful for simulations and relevant to this task).
