@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import json
 
 
-# todo : tests need to be dummy, so we should create a data generation function
+# todo : tests data need to be dummy, so we should create a data generation function on conftest_file
 
 def test_status_endpoint(client):
     """Test the status endpoint for correct HTTP response and data structure."""
