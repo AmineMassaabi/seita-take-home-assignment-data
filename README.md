@@ -95,5 +95,6 @@ We have prepared [a dataset with weather forecasts in CSV](weather.csv) to be us
 - Caching: Implement caching for frequently requested forecasts to improve performance.
 - Additional Forecast Types: Extend the model to handle additional weather data (e.g., humidity, precipitation).
 - Authentication: Add authentication for production environments to limit access.
+- Create a CI/CD pipeline
 
 ### Thanks in advance 
