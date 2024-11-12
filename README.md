@@ -26,9 +26,45 @@ This project provides a weather forecast API for accessing weather data, designe
 
 
 
-seita-take-home-assignment-data/ ├── data/
-│ └── weather_forecast.csv # CSV data file containing weather forecasts │ ├── my_weather_plugin/
-│ ├── init.py # Initializes the plugin package │ ├── consts.py # Constants for configurations or settings │ ├── helpers.py # Helper functions for data processing │ ├── weather_forecast.py # Main module for processing weather forecasts │ └── tests/ # Unit tests for the plugin │ ├── init.py │ ├── conftest.py # Test configurations and fixtures │ ├── test_app.py # Tests for the application setup and API functionality │ └── test_weather_forecast.py # Tests for data handling and processing in weather_forecast.py │ ├── docker-compose.yml # Docker Compose configuration to run the app ├── Dockerfile # Dockerfile to build the app container ├── main.py # Main entry point to run the application ├── README.md # Project documentation ├── requirements.txt # Dependencies for the project └── test.dockerfile # Dockerfile for testing the application
+seita-take-home-assignment-data/\n
+
+├── data/           
+
+│   └── weather_forecast.csv    # CSV data file containing weather forecasts
+
+│
+
+├── my_weather_plugin/          
+
+│   ├── __init__.py
+
+│   ├── consts.py                # Constants for configurations or settings
+
+│   ├── helpers.py               # Helper functions for data processing
+
+│   ├── weather_forecast.py      # Main module for processing weather forecasts
+
+│   └── tests/                   # Unit tests for the plugin
+
+│       ├── __init__.py
+
+│       ├── conftest.py          # Tests configuration
+
+│       └── test_app.py          # The application setup and API functionality Tests
+
+│
+
+├── docker-compose.yml           # Docker Compose configuration to run the app and Test
+
+├── Dockerfile                   # Dockerfile to build the app container
+
+├── main.py                      # Main entry point to run the application
+
+├── README.md                    # Project documentation
+
+├── requirements.txt             # Dependencies for the project
+
+└── test.dockerfile              # Dockerfile for testing the application
 
 ## Setup
 
@@ -54,4 +90,4 @@ seita-take-home-assignment-data/ ├── data/
 - Additional Forecast Types: Extend the model to handle additional weather data (e.g., humidity, precipitation).
 - Authentication: Add authentication for production environments to limit access.
 
-
+### Thanks in advance 
