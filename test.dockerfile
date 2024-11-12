@@ -4,6 +4,8 @@ WORKDIR /app
 COPY . /app
 RUN apt-get update && apt-get install -y git
 RUN pip3 install -r requirements.txt
+RUN pip install pytest pytest-flask
 
-EXPOSE 5000
-CMD [ "python3" , "-m", "main.py" ]
+
+RUN [ "pytest" ]
+

@@ -1,17 +1,5 @@
-import pytest
 from datetime import datetime, timedelta
-from flask import json, jsonify
-
-from main import create_app
-
-
-@pytest.fixture
-def client():
-    print(f'client is running')
-    app = create_app()
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+from flask import json
 
 
 def test_status_endpoint(client):
