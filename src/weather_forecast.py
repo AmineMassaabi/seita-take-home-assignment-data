@@ -13,6 +13,10 @@ from src.utils.consts import target_variables, path_url
 
 
 class MyDFPostProcessing(Transformation):
+    """
+    Custom transformation class to preprocess DataFrame specific to a given sensor.
+    Applies filtering, sorting, and de-duplication.
+    """
     def __init__(self, sensor):
         self.sensor = sensor
 
@@ -43,6 +47,10 @@ def get_speccing_object_series_specs(df, sensor):
 
 
 def get_speccing_csv_series_specs(sensor):
+    """
+    Configure specifications for loading and processing data from a CSV file using the CSVFileSeriesSpecs class
+    from timetomodel.
+    """
     return speccing.CSVFileSeriesSpecs(
         file_path=path_url,
         time_column='event_start',
@@ -55,7 +63,16 @@ def get_speccing_csv_series_specs(sensor):
 
 
 class WEATHER_FORECAST_MODEL():
-    def __init__(self, temperature_data=None, irradiance_data=None, wind_speed_data=None):
+    """
+    A model for forecasting weather variables such as temperature, irradiance, and wind speed.
+    Initializes data series from specified sources and prepares them for modeling.
+    """
+    def __init__(self):
+
+        """
+        I commented the code below because I worked ObjectSeriesSpecs first and changed  to CSVFileSeriesSpecs
+        """
+        # def __init__(self, temperature_data=None, irradiance_data=None, wind_speed_data=None):
         # also we can work wih CSVFileSeriesSpecs inplace of ObjectSeriesSpecs
         # temperature_data_specs = get_speccing_object_series_specs(temperature_data, 'temperature')
         # irradiance_data_specs = get_speccing_object_series_specs(irradiance_data, 'irradiance')
@@ -77,9 +94,13 @@ class WEATHER_FORECAST_MODEL():
         self.fitted_models = {}
 
     def get_model_specs(self, lag=24, target_variable="temperature"):
+        """
+        Generate specifications for the forecasting model, including setting up the outcome variable and regressors.
+        """
+
         # Define the time range for training and testing data
-        start_of_training = self.temperature_series.index[0]  # First timestamp in the temperature series
-        end_of_testing = self.temperature_series.index[-1]  # Last timestamp in the temperature series
+        start_of_training = self.temperature_series.index[0]  # First date in the temperature series
+        end_of_testing = self.temperature_series.index[-1]  # Last date in the temperature series
 
         if target_variable == 'temperature':
             outcome_var = copy(self.temperature_object_series)
@@ -101,11 +122,14 @@ class WEATHER_FORECAST_MODEL():
             regressors=regressors,
             start_of_training=start_of_training + timedelta(hours=lag),
             end_of_testing=end_of_testing - timedelta(hours=lag),
-            ratio_training_testing_data=0.90,  # Train-test split ratio
+            ratio_training_testing_data=0.80,  # Train-test split ratio
         )
         return model_specs
 
     def train_models(self, lag=24):
+        """
+        Train models for each target variable based on generated specifications.
+        """
         for target_variable in target_variables:
             model_specs = self.get_model_specs(lag=lag, target_variable=target_variable)
             fitted_model = create_fitted_model(model_specs, f"Weather Forecast {target_variable} Model")
@@ -114,9 +138,10 @@ class WEATHER_FORECAST_MODEL():
     def evaluate_models(self, lag):
         """
         We transformed evaluate_models from timetomodel to get adequate output
-        :return: rmse value
+        :return: rmse values for each model
         """
         rmse_values = {}
+        percentage_accuracy = {}
         for target_variable in target_variables:
             m1 = ModelState(self.fitted_models[target_variable], self.get_model_specs(lag=lag,
                                                                                       target_variable=target_variable))
@@ -132,13 +157,16 @@ class WEATHER_FORECAST_MODEL():
             if m1_specs.outcome_var.feature_transformation is not None:
                 y_test = m1_specs.outcome_var.feature_transformation.back_transform_value(y_test)
                 y_hat_test = m1_specs.outcome_var.feature_transformation.back_transform_value(y_hat_test)
+            target_range = np.max(y_test) - np.min(y_test)
 
             rmse_values[target_variable] = round(sm.tools.eval_measures.rmse(y_test, y_hat_test, axis=0), 4)
-            print(f'rmse value for {target_variable} = {rmse_values[target_variable]}, in percentage ='
-                  f' {round(abs(rmse_values[target_variable] / np.mean(y_test) - 1) * 100)}%')
-        return rmse_values
+            percentage_accuracy[target_variable] = round((1.0 - (rmse_values[target_variable] / target_range)) * 100)
+        return rmse_values, percentage_accuracy
 
     def forecast_model(self, now, calculation_mesures, lag=24):
+        """
+        Generate a forecast for specified weather variables using trained models and current conditions.
+        """
         self.train_models(lag)
         features = pd.DataFrame(
             index=pd.date_range(start=now, end=now, freq="H"),
@@ -155,4 +183,3 @@ class WEATHER_FORECAST_MODEL():
             )
             forecasted_values[target_variable] = forecasted_value
         return forecasted_values
-        # self.evaluate_models(lag)
