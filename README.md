@@ -85,6 +85,7 @@ seita-take-home-assignment-data/\n
    ```
 
 ## Future Improvements
+- Automate the model data update when updaing the csv file in github
 - Plugin: FlexMeasures plugin need to be developped 
 - Tests: data need to be dummy
 - Error Handling and Validation: Improve error responses for invalid requests.
