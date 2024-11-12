@@ -85,6 +85,8 @@ seita-take-home-assignment-data/\n
    ```
 
 ## Future Improvements
+- Plugin: FlexMeasures plugin need to be developped 
+- Tests: data need to be dummy
 - Error Handling and Validation: Improve error responses for invalid requests.
 - Caching: Implement caching for frequently requested forecasts to improve performance.
 - Additional Forecast Types: Extend the model to handle additional weather data (e.g., humidity, precipitation).
